@@ -1,7 +1,6 @@
 FROM archlinux
 
 ####################################### Base ##################################################
-
 RUN mv /etc/pacman.conf.pacnew /etc/pacman.conf
 
 RUN pacman -Syyu --noconfirm
@@ -15,8 +14,8 @@ RUN wget -qO - "https://www.archlinux.org/mirrorlist/?country=DE&protocol=https&
 RUN pacman -Syy --noconfirm --needed base base-devel
 
 # Generate locales and set them
-RUN echo "de_DE.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen
-ENV LANG=de_DE.UTF-8
+RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen
+ENV LANG=en_US.UTF-8
 
 RUN pacman -S --noconfirm --needed \
     bash-completion \
@@ -24,7 +23,7 @@ RUN pacman -S --noconfirm --needed \
     git tk \
     htop \
     man \
-    nano \
+    micro \
     openssh \
     ranger \
     sudo \
@@ -34,10 +33,10 @@ RUN pacman -S --noconfirm --needed \
     zsh
 
 # Install mesa hardware acceleration and alsa plugin for sound with pulse
-RUN pacman -S --noconfirm --needed mesa-demos pulseaudio-alsa
+RUN pacman -S --noconfirm --needed mesa pulseaudio-alsa
 
 # Install graphical programs
-RUN pacman -S --noconfirm --needed chromium code dmenu
+RUN pacman -S --noconfirm --needed firefox dmenu
 
 # Create man index cache
 RUN mandb
@@ -57,7 +56,6 @@ ARG USER
 RUN useradd -m -G wheel,storage,audio,video,docker,kmem -s /usr/bin/zsh $USER
 
 ####################################### Optional ##################################################
-
 # Install yay AUR helper
 # RUN wget "https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz" -O - | tar xz -C /tmp/
 # RUN chown -R $USER:$USER /tmp/yay/
@@ -79,21 +77,10 @@ RUN useradd -m -G wheel,storage,audio,video,docker,kmem -s /usr/bin/zsh $USER
 # RUN pacman -S --noconfirm --needed go go-tools
 # ENV GOPATH=/home/$USER/dev/go
 # ENV GOBIN=$GOPATH/bin
-
-####################################### End ##################################################
-
-# Update arch
-ARG DISABLE_CACHE=1
-RUN pacman --noconfirm -Syyu
+###################################################################################################
 
 # Set user
 ENV USER=$USER
 USER $USER
 
 WORKDIR /home/$USER
-
-####################################### TODO ##################################################
-# jdk8-openjdk
-# libxslt
-# dotnet turn off telemetry
-# more intelligent image updating
