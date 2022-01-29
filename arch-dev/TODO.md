@@ -1,0 +1,7 @@
+- jdk8-openjdk
+- libxslt
+- dotnet turn off telemetry
+- more intelligent image updating
+- copy dotfiles into image
+- add i3wm shortcut to open apps in container
+	- make script, to select which container
